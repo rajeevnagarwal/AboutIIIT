@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
     private void set(String text)
     {
         mAboutTextView.setText(text);
+    }
+    private String parseHTML(String html)
+    {
+        String ans = Html.fromHtml(html).toString();
+        return ans;
     }
 
     private class AsyncFetch extends AsyncTask<String, String, String> {
@@ -126,8 +132,11 @@ public class MainActivity extends AppCompatActivity {
                     String line="";
 
                     while ((line = reader.readLine()) != null) {
-                        //System.out.println(line);
-                        result = result + "\n"+line;
+
+                        String data = parseHTML(line);
+                        System.out.println(data);
+                        if(data.matches("[a-zA-Z0-9()@,. \n-]+"))
+                            result = result + "\n"+parseHTML(line);
                     }
 
                     // Pass data to onPostExecute method
